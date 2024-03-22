@@ -1,0 +1,17 @@
+(text) => let
+    apikey      = "e4791363605e4d3db459b36a378e7cfc",
+    endpoint    = "https://eastus.api.cognitive.microsoft.com/text/analytics/v2.1/sentiment",
+    jsontext    = Text.FromBinary(Json.FromValue(Text.Start(Text.Trim(text), 5000))),
+    jsonbody    = "{ documents: [ { language: ""en"", id: ""0"", text: " & jsontext & " } ] }",
+    bytesbody   = Text.ToBinary(jsonbody),
+    headers     = [#"Ocp-Apim-Subscription-Key" = apikey],
+    bytesresp   = Web.Contents(endpoint, [Headers=headers, Content=bytesbody]),
+    jsonresp    = Json.Document(bytesresp),
+    sentiment   = jsonresp[documents]{0}[score]
+in  sentiment
+
+
+
+1c445f4bdba8449aaaf239928258b689
+
+https://aitestacc.cognitiveservices.azure.com/
